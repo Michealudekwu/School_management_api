@@ -1,0 +1,5 @@
+from .course_views import get_course,get_courses,delete_course,update_course,create_course, enroll_in_course
+from .department_views import get_departments,delete_department,create_department,update_department,department_detail
+from .level_view import create_level,level_detail,delete_level,update_level,get_levels
+from .material_views import create_materials,update_material,get_material,all_materials,delete_material
+from .topic_views import create_topic,all_topics,get_topic,delete_topic,update_topic, completed_topic
