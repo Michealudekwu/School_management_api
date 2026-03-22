@@ -1,22 +1,18 @@
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, IsAdminUser,AllowAny
+from rest_framework.permissions import IsAdminUser
 from rest_framework import status
 from ...models import Level
 from ...serializers import LevelSerializer
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def get_levels(request):
     levels = Level.objects.all()
     serialize_level = LevelSerializer(levels, many=True)
     return Response(serialize_level.data)
     
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,IsAdminUser])
+@permission_classes([IsAdminUser])
 def create_level(request):
     serialize_level = LevelSerializer(data=request.data)
     if serialize_level.is_valid():
@@ -25,8 +21,6 @@ def create_level(request):
     return Response(serialize_level.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def level_detail(request, level_id):
     try:
         level = Level.objects.get(id=level_id)
@@ -37,7 +31,6 @@ def level_detail(request, level_id):
     return Response(serialize_level.data)
 
 @api_view(["PATCH"])
-@authentication_classes([TokenAuthentication])
 @permission_classes([IsAdminUser])
 def update_level(request, level_id):
     try:
@@ -52,7 +45,6 @@ def update_level(request, level_id):
     return Response(serialize_level.errors, status=status.HTTP_400_BAD_REQUEST)
     
 @api_view(["DELETE"])
-@authentication_classes([TokenAuthentication])
 @permission_classes([IsAdminUser])
 def delete_level(request, level_id):
     try:

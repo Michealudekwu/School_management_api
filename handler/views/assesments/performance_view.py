@@ -1,21 +1,17 @@
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from ...models import Performance, Progress
 from ...serializers import PerformanceSerializer, ProgressSerializer
 from ..users import IsStudent
 
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsStudent])
+@permission_classes([IsStudent])
 @api_view(['GET'])
 def performance_view(request):
     performance = Performance.objects.filter(user=request.user).select_related('course')
     serializer = PerformanceSerializer(performance, many=True)
     return Response(serializer.data)
 
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsStudent])
+@permission_classes([IsStudent])
 @api_view(['GET'])
 def progress_view(request):
     progress = Progress.objects.filter(user=request.user).select_related('course')

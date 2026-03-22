@@ -1,7 +1,5 @@
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
 from ..users import IsTeacher
 from rest_framework import status
 from django.shortcuts import get_object_or_404
@@ -9,16 +7,12 @@ from ...models import Course, Department, Level, Teacher, Enrollment, Student
 from ...serializers import CourseDetailsSerializer, EnrollmentSerializer
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def get_courses(request,level_id, department_id):
     courses = Course.objects.filter(department = department_id, level = level_id)
     serializer = CourseDetailsSerializer(courses, many = True)
     return Response(serializer.data)
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def enroll_in_course(request, course_id):
     course = get_object_or_404(
         Course,
@@ -41,8 +35,7 @@ def enroll_in_course(request, course_id):
     return Response(serializer.errors, status=status.HTTP_201_CREATED)
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,IsTeacher])
+@permission_classes([IsTeacher])
 def create_course(request, level_id, department_id):
     department = get_object_or_404(
         Department,
@@ -66,8 +59,6 @@ def create_course(request, level_id, department_id):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def get_course(request,level_id, department_id, course_id):
     course = get_object_or_404(
         Course,
@@ -80,7 +71,6 @@ def get_course(request,level_id, department_id, course_id):
     return Response(serializer.data)
     
 @api_view(['PATCH'])
-@authentication_classes([TokenAuthentication])
 @permission_classes([IsTeacher])
 def update_course(request,level_id, department_id, course_id):
     user = request.user
@@ -104,7 +94,6 @@ def update_course(request,level_id, department_id, course_id):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-@authentication_classes([TokenAuthentication])
 @permission_classes([IsTeacher])
 def delete_course(request, level_id, department_id,course_id):
     user = request.user

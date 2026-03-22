@@ -7,8 +7,6 @@ from django.shortcuts import get_object_or_404
 from ...models import Option, Question
 from ...serializers import OptionSerializer
 
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 @api_view(['GET', 'POST'])
 def option_list_create(request, exam_id,question_id):
     question = get_object_or_404(
@@ -29,8 +27,6 @@ def option_list_create(request, exam_id,question_id):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@authentication_classes([TokenAuthentication])  
-@permission_classes([IsAuthenticated])
 @api_view(['GET', 'PATCH', 'DELETE'])
 def option_detail(request, question_id,option_id):
     option = get_object_or_404(

@@ -1,6 +1,4 @@
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from ..users import IsStudent
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,8 +7,7 @@ from django.utils import timezone
 from ...models import Answer, Question, Exam, Attempt, Option, Performance, Student
 from ...serializers import QuestionSerializer, AttemptSerializer
   
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsStudent])
+@permission_classes([IsStudent])
 @api_view(['GET'])
 def view_results(request, course_id,exam_id):
     if request.method == "GET":
@@ -35,8 +32,7 @@ def view_results(request, course_id,exam_id):
         return Response(results)
 
 
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsStudent])
+@permission_classes([IsStudent])
 @api_view(['POST'])
 def start_exam_view(request, course_id,exam_id):
     exam = get_object_or_404(
@@ -84,8 +80,7 @@ def start_exam_view(request, course_id,exam_id):
         )
         return Response(AttemptSerializer(attempt).data, status=status.HTTP_201_CREATED)
 
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsStudent])
+@permission_classes([IsStudent])
 @api_view(['POST', 'GET'])
 def submit_attempt(request, course_id,exam_id):
     if request.method == "GET":

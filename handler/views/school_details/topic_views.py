@@ -9,8 +9,6 @@ from ...models import Topic, Progress, Course
 from ...serializers import TopicSerializer
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def all_topics(request, course_id):
     topics = Topic.objects.filter(course=course_id)
     if topics:
@@ -26,8 +24,6 @@ def all_topics(request, course_id):
     return Response({'error': 'No topics in the DB'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def completed_topic(request, course_id, tp_id):
     try:
         progress = Progress.objects.get(user=request.user, course_id=course_id)
@@ -49,8 +45,7 @@ def completed_topic(request, course_id, tp_id):
     return Response({'detail': 'Topic marked as completed', 'progress_percentage': progress.progress_percentage}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsTeacher])
+@permission_classes([IsTeacher])
 def create_topic(request, course_id):
     course = Course.objects.get(id=course_id)
     serializer = TopicSerializer(data= request.data)
@@ -60,8 +55,6 @@ def create_topic(request, course_id):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def get_topic(request, course_id,tp_id):
     Topic = get_object_or_404(
         Topic,
@@ -74,8 +67,7 @@ def get_topic(request, course_id,tp_id):
     return Response({'error':'Topic Not Exist'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['PATCH'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsTeacher])
+@permission_classes([IsTeacher])
 def update_topic(request, course_id, tp_id):
     Topic = get_object_or_404(
         Topic,
@@ -91,8 +83,7 @@ def update_topic(request, course_id, tp_id):
     return Response({'error': 'Topic not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['DELETE'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsTeacher])
+@permission_classes([IsTeacher])
 def delete_topic(request, course_id,tp_id):
     Topic = get_object_or_404(
         Topic,

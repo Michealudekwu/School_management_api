@@ -1,14 +1,12 @@
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
-from rest_framework.authentication import TokenAuthentication
 from rest_framework import status
 from ...models import Department
 from ...serializers import DepartmentSerializer
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,IsAdminUser])
+@permission_classes([IsAdminUser])
 def create_department(request):
     serialize_department = DepartmentSerializer(data=request.data)
     if serialize_department.is_valid():
@@ -17,16 +15,12 @@ def create_department(request):
     return Response(serialize_department.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def get_departments(request):
     departments = Department.objects.all()
     serialize_department = DepartmentSerializer(departments, many=True)
     return Response(serialize_department.data)
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def department_detail(request, department_id):
     try:
         department = Department.objects.get(id=department_id)
@@ -37,8 +31,7 @@ def department_detail(request, department_id):
     return Response(serialize_department.data)
     
 @api_view(["PATCH"])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,IsAdminUser])
+@permission_classes([IsAdminUser])
 def update_department(request, department_id):
     try:
         department = Department.objects.get(id=department_id)
@@ -52,8 +45,7 @@ def update_department(request, department_id):
     return Response(serialize_department.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["DELETE"])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated,IsAdminUser])
+@permission_classes([IsAdminUser])
 def delete_department(request, department_id):
     try:
         department = Department.objects.get(id=department_id)

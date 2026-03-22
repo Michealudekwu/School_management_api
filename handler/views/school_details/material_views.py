@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework import status 
@@ -9,8 +9,6 @@ from ...serializers import MaterialSerializer
 from ..users import IsTeacher
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def all_materials(requests, tp_id):
     materials = Material.objects.filter(topic=tp_id)
     if materials:
@@ -19,8 +17,7 @@ def all_materials(requests, tp_id):
     return Response({'error': 'No materials in the DB'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsTeacher])
+@permission_classes([IsTeacher])
 def create_materials(request, course_id,tp_id):
     topic = get_object_or_404(
         Topic,
@@ -35,8 +32,6 @@ def create_materials(request, course_id,tp_id):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 def get_material(request, tp_id,mat_id):
     material = get_object_or_404(
         Material,
@@ -49,8 +44,7 @@ def get_material(request, tp_id,mat_id):
     return Response({'error':'Material Not Exist'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['PATCH'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsTeacher])
+@permission_classes([IsTeacher])
 def update_material(request, tp_id,mat_id):
     material = get_object_or_404(
         Material,
@@ -66,8 +60,7 @@ def update_material(request, tp_id,mat_id):
     return Response({'error': 'Material not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['DELETE'])
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated, IsTeacher])
+@permission_classes([IsTeacher])
 def delete_material(request, tp_id,mat_id):
     material = get_object_or_404(
         Material,

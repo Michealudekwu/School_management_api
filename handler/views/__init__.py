@@ -1,4 +1,4 @@
-from .users import get_user_details, login, create_student, create_teacher, update_student, update_teahcer, delete_student, delete_teacher
+from .users import get_user_details,create_student, create_teacher, update_student, update_teahcer, delete_student, delete_teacher
 from .school_details import get_course,get_courses,delete_course,update_course,create_course
 from .school_details import get_departments,delete_department,create_department,update_department,department_detail
 from .school_details import create_level,level_detail,delete_level,update_level,get_levels

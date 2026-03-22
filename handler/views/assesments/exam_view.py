@@ -7,8 +7,6 @@ from django.shortcuts import get_object_or_404
 from ...models import Exam, Question, Course
 from ...serializers import QuestionSerializer, ExamSerializer
 
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 @api_view(['GET', 'POST'])
 def exam_list_create(request, level_id, department_id,course_id):
     try:
@@ -36,8 +34,6 @@ def exam_list_create(request, level_id, department_id,course_id):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 @api_view(['GET', 'PUT', 'DELETE'])
 def exam_detail(request, course_id,exam_id):
     exam = get_object_or_404(
@@ -62,8 +58,6 @@ def exam_detail(request, course_id,exam_id):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 @api_view(['GET', 'POST'])
 def exam_questions_list_create(request, course_id,exam_id):
     try:
@@ -88,8 +82,6 @@ def exam_questions_list_create(request, course_id,exam_id):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-@authentication_classes([TokenAuthentication])
-@permission_classes([IsAuthenticated])
 @api_view(['GET', 'PATCH', 'DELETE'])
 def exam_question_detail(request, course_id, exam_id, question_id):
     try:
