@@ -6,4 +6,4 @@ class AnswerForumSerializer(serializers.ModelSerializer):
     question = QuestionFormSerializer(read_only=True)
     class Meta:
         model = AnswerForum
-        fields = ['id', 'user', 'question', 'answer', 'created_at']
+        fields = ['id', 'answer', 'created_at']
