@@ -21,6 +21,7 @@ class TeacherSerializer(serializers.ModelSerializer):
         fields = ['id', 'staff_id','user', 'department_name', 'level_name', 'department', 'level', 'username', 'password', 'email', 'first_name', 'last_name']
 
     def create(self, validated_data):
+        # print(validated_data)
         user_data = {
             'username': validated_data.pop('username'),
             'password': validated_data.pop('password'),
@@ -31,8 +32,10 @@ class TeacherSerializer(serializers.ModelSerializer):
         }
 
         user = User.objects.create_user(**user_data)
+        levels = validated_data.pop('level', [])
         teacher = Teacher.objects.create(user=user, **validated_data)
-        
+        if levels:
+            teacher.level.set(levels)
         return teacher
     
     def update(self, instance, validated_data):

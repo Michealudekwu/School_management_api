@@ -1,6 +1,4 @@
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import api_view, permission_classes
 from ..users import IsTeacher
 from rest_framework.response import Response
 from rest_framework import status 
@@ -10,14 +8,19 @@ from ...serializers import TopicSerializer
 
 @api_view(['GET'])
 def all_topics(request, course_id):
-    topics = Topic.objects.filter(course=course_id)
+    course = get_object_or_404(
+        Course,
+        id = course_id
+    )
+    topics = Topic.objects.filter(course=course)
     if topics:
         Progress.objects.get_or_create(
             user=request.user,
             course_id=course_id,
-            total_topics=topics.count(),
-            completed_topics=0,
-            progress_percentage=0.0
+            defaults={
+                "total_topics" : topics.count(),
+                "progress_percentage" : 0.0
+            }
         )
         serializer = TopicSerializer(topics, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

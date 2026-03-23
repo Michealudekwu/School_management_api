@@ -83,6 +83,10 @@ def start_exam_view(request, course_id,exam_id):
 @permission_classes([IsStudent])
 @api_view(['POST', 'GET'])
 def submit_attempt(request, course_id,exam_id):
+    student = get_object_or_404(
+        Student,
+        user = request.user
+    )
     if request.method == "GET":
         exam = get_object_or_404(
             Exam,
@@ -96,7 +100,7 @@ def submit_attempt(request, course_id,exam_id):
     
     elif request.method == "POST" :
         attempt = Attempt.objects.filter(
-            user=request.user, exam_id=exam_id, is_submitted=False
+            Student=student, exam_id=exam_id, is_submitted=False
         ).first()
         if not attempt:
             return Response(
@@ -143,8 +147,6 @@ def submit_attempt(request, course_id,exam_id):
 
         performance = Performance.objects.create(
             student=request.user.student,
-            exam=exam,
-            score=score,
             course = exam.course,
             average_score=average_score,
             best_score = best_score,

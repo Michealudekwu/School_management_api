@@ -8,6 +8,8 @@ from handler.urls.submit_urls import urlpatterns as submit_patterns
 from handler.urls.topic_urls import urlpatterns as topic_patterns
 from handler.urls.material_urls import urlpatterns as materials_patterns
 from handler.urls.analytics_urls import urlpatterns as analytics_patterns
+from handler.urls.enroll_urls import urlpatterns as enroll_patterns
+from handler.urls.q_and_a_urls import urlpatterns as forum_patterns
 
 urlpatterns = (
     users_patterns +
@@ -19,5 +21,7 @@ urlpatterns = (
     submit_patterns +
     topic_patterns +
     materials_patterns +
-    analytics_patterns
+    analytics_patterns +
+    enroll_patterns +
+    forum_patterns
 )

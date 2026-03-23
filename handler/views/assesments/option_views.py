@@ -8,11 +8,12 @@ from ...models import Option, Question
 from ...serializers import OptionSerializer
 
 @api_view(['GET', 'POST'])
-def option_list_create(request, exam_id,question_id):
+def option_list_create(request, exam_id,question_id, course_id):
     question = get_object_or_404(
             Question,
             id = question_id,
-            exam_id = exam_id
+            exam_id = exam_id,
+            exam__course_id = course_id
         )
 
     if request.method == 'GET':
@@ -28,11 +29,13 @@ def option_list_create(request, exam_id,question_id):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'PATCH', 'DELETE'])
-def option_detail(request, question_id,option_id):
+def option_detail(request, question_id,option_id, exam_id, course_id):
     option = get_object_or_404(
             Option,
             id = option_id,
-            question_id = question_id
+            question_id = question_id,
+            question__exam_id = exam_id,
+            question__exam__course_id = course_id
         )
 
     if request.method == 'GET':

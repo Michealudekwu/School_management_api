@@ -22,7 +22,7 @@ def enroll_in_course(request, course_id):
         Student,
         user = request.user
     )
-    if Enrollment.objects.filter(student = student).exists():
+    if Enrollment.objects.filter(student = student, course = course).exists():
         return Response(
             {'error' : 'You are already enrolled'},
             status=status.HTTP_400_BAD_REQUEST
@@ -32,7 +32,7 @@ def enroll_in_course(request, course_id):
         course=course
     )
     serializer = EnrollmentSerializer(enrollment)
-    return Response(serializer.errors, status=status.HTTP_201_CREATED)
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 @api_view(['POST'])
 @permission_classes([IsTeacher])
@@ -47,7 +47,7 @@ def create_course(request, level_id, department_id):
     )
     teacher = get_object_or_404(
         Teacher,
-        user = request.user
+        user=request.user
     )
 
     if teacher.department != department:
@@ -78,7 +78,7 @@ def update_course(request,level_id, department_id, course_id):
         Department,
         id = department_id
     )
-    if user.teacher.department != department:
+    if user.teacher_profile.department != department:
         return Response({'detail': 'Forbidden.'}, status=status.HTTP_403_FORBIDDEN)
 
     course = get_object_or_404(
@@ -101,7 +101,7 @@ def delete_course(request, level_id, department_id,course_id):
         Department,
         id = department_id
     )
-    if user.role != 'teacher' and user.teacher.department != department:
+    if user.role != 'teacher' and user.teacher_profile.department != department:
         return Response({'detail': 'Forbidden.'}, status=status.HTTP_403_FORBIDDEN)
     
     course = get_object_or_404(

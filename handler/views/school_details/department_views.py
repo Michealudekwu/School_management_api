@@ -1,12 +1,12 @@
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from ...models import Department
 from ...serializers import DepartmentSerializer
 
 @api_view(['POST'])
-@permission_classes([IsAdminUser])
+@permission_classes([AllowAny])
 def create_department(request):
     serialize_department = DepartmentSerializer(data=request.data)
     if serialize_department.is_valid():

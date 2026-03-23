@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from ...models import AnswerForum
 from .questionforum_serializer import QuestionFormSerializer
+from ..users import UserSerializer
 
 class AnswerForumSerializer(serializers.ModelSerializer):
-    question = QuestionFormSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
     class Meta:
         model = AnswerForum
-        fields = ['id', 'answer', 'created_at']
+        fields = ['id', 'user','answer', 'created_at']

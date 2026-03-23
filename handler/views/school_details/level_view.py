@@ -1,6 +1,6 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework import status
 from ...models import Level
 from ...serializers import LevelSerializer
@@ -12,7 +12,7 @@ def get_levels(request):
     return Response(serialize_level.data)
     
 @api_view(['POST'])
-@permission_classes([IsAdminUser])
+@permission_classes([AllowAny])
 def create_level(request):
     serialize_level = LevelSerializer(data=request.data)
     if serialize_level.is_valid():

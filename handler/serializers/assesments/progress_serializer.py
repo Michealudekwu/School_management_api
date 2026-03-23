@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ...models import Progress, User, Course
+from ...models import Progress
 
 class ProgressSerializer(serializers.ModelSerializer):
     class Meta:

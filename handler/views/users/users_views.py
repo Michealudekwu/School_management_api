@@ -64,14 +64,14 @@ def delete_teacher(request):
 @api_view(['GET'])
 def get_user_details(request):
     user = request.user
-    if hasattr(user, 'student'):
-        student = user.student
+    if hasattr(user, 'student_profile'):
+        student = user.student_profile
         # performace = Performance.objects.filter(student=student)
         # per_serializer = PerformanceSerializer(performace)
         stud_serializer = StudentSerializer(student)
         return Response(stud_serializer.data)
-    elif hasattr(user, 'teacher'):
-        serializer = TeacherSerializer(user.teacher)
+    elif hasattr(user, 'teacher_profile'):
+        serializer = TeacherSerializer(user.teacher_profile)
         return Response(serializer.data)
     else:
         return Response({'error': 'User details not found'}, status=status.HTTP_404_NOT_FOUND)
