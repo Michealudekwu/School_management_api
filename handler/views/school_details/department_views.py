@@ -6,7 +6,6 @@ from ...models import Department
 from ...serializers import DepartmentSerializer
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
 def create_department(request):
     serialize_department = DepartmentSerializer(data=request.data)
     if serialize_department.is_valid():
@@ -15,6 +14,7 @@ def create_department(request):
     return Response(serialize_department.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def get_departments(request):
     departments = Department.objects.all()
     serialize_department = DepartmentSerializer(departments, many=True)

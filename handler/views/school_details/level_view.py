@@ -6,13 +6,13 @@ from ...models import Level
 from ...serializers import LevelSerializer
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def get_levels(request):
     levels = Level.objects.all()
     serialize_level = LevelSerializer(levels, many=True)
     return Response(serialize_level.data)
     
 @api_view(['POST'])
-@permission_classes([AllowAny])
 def create_level(request):
     serialize_level = LevelSerializer(data=request.data)
     if serialize_level.is_valid():
